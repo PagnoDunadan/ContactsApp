@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ContactsApp.Models;
+using System.Web.UI;
 
 namespace ContactsApp.Controllers
 {
@@ -14,13 +15,14 @@ namespace ContactsApp.Controllers
     {
         private ContactsAppContext db = new ContactsAppContext();
 
-        // GET: Contacts
-        public ActionResult Index()
+        // GET: Contacts/Search
+        public ActionResult Search()
         {
             return View();
         }
 
         // GET: Contacts/All
+        [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult All()
         {
             return Json(db.Contacts.ToList(), JsonRequestBehavior.AllowGet);

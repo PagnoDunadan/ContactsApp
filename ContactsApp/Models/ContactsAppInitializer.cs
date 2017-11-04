@@ -12,6 +12,10 @@ namespace ContactsApp.Models
             var contacts = new List<Contact>
             {
                 new Contact {ContactFirstName = "Petar", ContactLastName = "Miličić", ContactAddress = "Betanija 15, Trogir", ContactEmail = "pmilicic@fesb.hr", ContactDefaultNumber = 00385957357271, ContactDefaultNumberType = "Mobile"},
+                new Contact {ContactFirstName = "Antonio", ContactLastName = "Miličić", ContactAddress = "Betanija 15, Trogir", ContactEmail = "amilic00@fesb.hr", ContactDefaultNumber = 00385958902440, ContactDefaultNumberType = "Mobile"},
+                new Contact {ContactFirstName = "Josip", ContactLastName = "Miličić", ContactAddress = "Betanija 15, Trogir", ContactEmail = "josip.milicic37@gmail.com", ContactDefaultNumber = 00385957415405, ContactDefaultNumberType = "Mobile"},
+                new Contact {ContactFirstName = "Kristina", ContactLastName = "Miličić", ContactAddress = "Betanija 15, Trogir", ContactEmail = "kike.milicic@gmail.com", ContactDefaultNumber = 00385958616204, ContactDefaultNumberType = "Mobile"},
+                new Contact {ContactFirstName = "Ružica", ContactLastName = "Kučić", ContactAddress = "Betanija 15, Trogir", ContactDefaultNumber = 00385915773831, ContactDefaultNumberType = "Mobile"},
             };
             contacts.ForEach(v => context.Contacts.Add(v));
             context.SaveChanges();
@@ -19,6 +23,10 @@ namespace ContactsApp.Models
             var phoneNumbers = new List<PhoneNumber>
             {
                 new PhoneNumber {PhoneNumberNumber = 0038521636802, PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(1))},
+                new PhoneNumber {PhoneNumberNumber = 0038521636802, PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(2))},
+                new PhoneNumber {PhoneNumberNumber = 0038521882001, PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(3))},
+                new PhoneNumber {PhoneNumberNumber = 0038521882001, PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(4))},
+                new PhoneNumber {PhoneNumberNumber = 0038521882001, PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(5))},
             };
             phoneNumbers.ForEach(p => context.PhoneNumbers.Add(p));
             context.SaveChanges();
