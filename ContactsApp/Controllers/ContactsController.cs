@@ -59,10 +59,13 @@ namespace ContactsApp.Controllers
             {
                 db.Contacts.Add(contact);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(contact);
             }
 
-            return View(contact);
+            var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
+            return Json(errors);
         }
 
         // GET: Contacts/Edit/5
