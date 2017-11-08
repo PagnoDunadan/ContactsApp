@@ -10,7 +10,7 @@ namespace ContactsApp.Models
     {
         public int PhoneNumberID { get; set; }
         [Required]
-        public double PhoneNumberNumber { get; set; }
+        public string PhoneNumberNumber { get; set; }
         public string PhoneNumberType { get; set; }
         [Required]
         public Contact Contact { get; set; }

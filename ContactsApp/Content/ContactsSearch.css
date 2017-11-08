@@ -1,0 +1,75 @@
+﻿body {
+    background-color: rgb(241,241,241);
+}
+
+#bootstrap-overrides .panelCustom {
+    width: 400px;
+    margin: 25px auto 25px auto;
+}
+
+#bootstrap-overrides .displayBlock {
+    display: block;
+}
+
+#bootstrap-overrides .noBorder {
+    border: none;
+}
+
+#bootstrap-overrides .displayNone {
+    display: none;
+}
+
+#bootstrap-overrides .contactTd {
+    width: 100%;
+    position: relative;
+}
+
+#bootstrap-overrides .contactLink {
+    width: 100%;
+    height: 100%;
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+#bootstrap-overrides .menuButtonEdit {
+    visibility: hidden;
+    position: absolute;
+    top: 0px;
+    right: 80px;
+}
+
+#bootstrap-overrides .menuButtonDelete {
+    visibility: hidden;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#bootstrap-overrides .contactRow:hover .menuButtonEdit {
+    visibility: visible;
+}
+
+#bootstrap-overrides .contactRow:hover .menuButtonDelete {
+    visibility: visible;
+}
+
+.box {
+    background-color: #218D9B;
+    height: 100px;
+    width: 100px;
+}
+
+.transform {
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    -ms-transition: all 2s ease;
+    transition: all 2s ease;
+}
+
+.transform-active {
+    background-color: #45CEE0;
+    height: 200px;
+    width: 200px;
+}

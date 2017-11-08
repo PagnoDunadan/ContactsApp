@@ -15,7 +15,7 @@ namespace ContactsApp.Models
         public string ContactAddress { get; set; }
         public string ContactEmail { get; set; }
         [Required]
-        public double ContactDefaultNumber { get; set; }
+        public string ContactDefaultNumber { get; set; }
         public string ContactDefaultNumberType { get; set; }
     }
 }

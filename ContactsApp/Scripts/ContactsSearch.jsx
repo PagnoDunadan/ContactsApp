@@ -1,39 +1,119 @@
-﻿const panelCustom = {
-    width: '400px',
-    margin: '25px auto 25px auto',
-};
-
-const maxPossibleWidth = {
-    width: '100%',
-};
-
-const contactLink = {
-    width: '100%',
-    height: '100%',
-    display: 'block',
-    textDecoration: 'none',
-    color: 'black',
-};
-
-const hidden = {
-    display: 'none',
-};
-
-var Contact = React.createClass({
+﻿var Contact = React.createClass({
+    getInitialState: function () {
+        return {
+            showEditForm: false,
+            ContactID: this.props.ContactID,
+            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
+            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : ""),
+        };
+    },
+    handleShowEditForm: function () {
+        this.setState({ showEditForm: !this.state.showEditForm });
+    },
+    handleDelete: function (e) {
+        var ContactID = this.props.ContactID;
+        this.props.onContactDelete({
+            ContactID,
+        });
+    },
+    handleContactFirstNameChange: function (e) {
+        this.setState({ ContactFirstName: e.target.value });
+    },
+    handleContactLastNameChange: function (e) {
+        this.setState({ ContactLastName: e.target.value });
+    },
+    handleContactAddressChange: function (e) {
+        this.setState({ ContactAddress: e.target.value });
+    },
+    handleContactEmailChange: function (e) {
+        this.setState({ ContactEmail: e.target.value });
+    },
+    handleContactDefaultNumberChange: function (e) {
+        this.setState({ ContactDefaultNumber: e.target.value });
+    },
+    handleContactDefaultNumberTypeChange: function (e) {
+        this.setState({ ContactDefaultNumberType: e.target.value });
+    },
+    handleResetClick: function (e) {
+        this.setState({
+            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
+            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : ""),
+        });
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        var ContactID = this.props.ContactID;
+        var ContactFirstName = this.state.ContactFirstName.trim();
+        var ContactLastName = this.state.ContactLastName.trim();
+        var ContactAddress = this.state.ContactAddress.trim();
+        var ContactEmail = this.state.ContactEmail.trim();
+        var ContactDefaultNumber = this.state.ContactDefaultNumber.trim();
+        var ContactDefaultNumberType = this.state.ContactDefaultNumberType.trim();
+        if (!ContactLastName || !ContactDefaultNumber) {
+            alert("ContactLastName and ContactDefaultNumber cannot be null");
+            return;
+        }
+        this.props.onContactEdit({
+            ContactID,
+            ContactFirstName, ContactLastName,
+            ContactAddress, ContactEmail,
+            ContactDefaultNumber, ContactDefaultNumberType,
+        });
+    },
     render: function () {
+        var iconLink;
+        switch (this.props.ContactDefaultNumberType) {
+            case "Mobile":
+                iconLink = "https://cdn2.iconfinder.com/data/icons/facebook-svg-icons-1/64/mobileicon-24.png";
+                break;
+            case "Landline":
+                iconLink = "https://cdn2.iconfinder.com/data/icons/snipicons/500/phone-old-24.png";
+                break;
+            case "Fax":
+                iconLink = "https://cdn2.iconfinder.com/data/icons/UII_Icons/24x24/fax.png";
+                break;
+            default:
+                iconLink = "https://cdn2.iconfinder.com/data/icons/snipicons/500/phone-24.png";
+        }
         return (
-            <tr>
-                <td style={maxPossibleWidth}>
-                    <a href={'/Contacts/Details/'+this.props.ContactID} style={contactLink}>
+            <tr className="contactRow">
+                <td className="contactTd displayBlock">
+                    <a href={this.props.detailsUrl + this.props.ContactID} className="contactLink">
                     <p>{this.props.ContactFirstName} {this.props.ContactLastName}</p>
-                    <p>{this.props.ContactDefaultNumber}</p>
+                    <p><img src={iconLink} width="24px" height="24px" /> {this.props.ContactDefaultNumber}</p>
                     </a>
+                    <button className="btn btn-primary btn-sm menuButtonEdit" onClick={this.handleShowEditForm}><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                    <button className="btn btn-danger btn-sm menuButtonDelete" onClick={this.handleDelete}><span className="glyphicon glyphicon-trash"></span> Delete</button>
                 </td>
-                <td>
-                    <button className="btn btn-primary btn-sm">Edit</button>
-                </td>
-                <td>
-                    <button className="btn btn-danger btn-sm">Delete</button>
+                <td className={this.state.showEditForm ? 'displayBlock noBorder' : 'displayNone'}>
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="text" placeholder="ContactFirstName" className="form-control"
+                            value={this.state.ContactFirstName} onChange={this.handleContactFirstNameChange} />
+                        <input type="text" placeholder="ContactLastName *" className="form-control"
+                            value={this.state.ContactLastName} onChange={this.handleContactLastNameChange} />
+                        <input type="text" placeholder="ContactAddress" className="form-control"
+                            value={this.state.ContactAddress} onChange={this.handleContactAddressChange} />
+                        <input type="text" placeholder="ContactEmail" className="form-control"
+                            value={this.state.ContactEmail} onChange={this.handleContactEmailChange} />
+                        <input type="text" placeholder="ContactDefaultNumber *" className="form-control"
+                            value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
+                        <select className="form-control" value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange}>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Landline">Landline</option>
+                            <option value="Fax">Fax</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="button" value="Reset" className="btn btn-default" onClick={this.handleResetClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary" />
+                    </form>
                 </td>
             </tr>
         );
@@ -49,7 +129,7 @@ var ContactForm = React.createClass({
             ContactDefaultNumber: '', ContactDefaultNumberType: '',
         };
     },
-    showHideContactForm: function () {
+    handleShowContactFormClick: function () {
         this.setState({ showContactForm: !this.state.showContactForm });
     },
     handleContactFirstNameChange: function (e) {
@@ -70,6 +150,13 @@ var ContactForm = React.createClass({
     handleContactDefaultNumberTypeChange: function (e) {
         this.setState({ ContactDefaultNumberType: e.target.value });
     },
+    handleClearClick: function (e) {
+        this.setState({
+            ContactFirstName: '', ContactLastName: '',
+            ContactAddress: '', ContactEmail: '',
+            ContactDefaultNumber: '', ContactDefaultNumberType: '',
+        });
+    },
     handleSubmit: function (e) {
         e.preventDefault();
         var ContactFirstName = this.state.ContactFirstName.trim();
@@ -79,12 +166,13 @@ var ContactForm = React.createClass({
         var ContactDefaultNumber = this.state.ContactDefaultNumber.trim();
         var ContactDefaultNumberType = this.state.ContactDefaultNumberType.trim();
         if (!ContactLastName || !ContactDefaultNumber) {
+            alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
         }
         this.props.onContactSubmit({
-            ContactFirstName: ContactFirstName, ContactLastName: ContactLastName,
-            ContactAddress: ContactAddress, ContactEmail: ContactEmail,
-            ContactDefaultNumber: ContactDefaultNumber, ContactDefaultNumberType: ContactDefaultNumberType,
+            ContactFirstName, ContactLastName,
+            ContactAddress, ContactEmail,
+            ContactDefaultNumber, ContactDefaultNumberType,
         });
         this.setState({
             ContactFirstName: '', ContactLastName: '',
@@ -95,8 +183,8 @@ var ContactForm = React.createClass({
     render: function () {
         return (
             <div>
-                <button className="btn btn-primary" onClick={this.showHideContactForm}>Show Contact Form</button>
-                <form className={this.state.showContactForm ? '' : 'hidden'} onSubmit={this.handleSubmit}>
+                <button className="btn btn-success" onClick={this.handleShowContactFormClick}>Show Contact Form</button>
+                <form className={this.state.showContactForm ? '' : 'displayNone'} onSubmit={this.handleSubmit}>
                     <input type="text" placeholder="ContactFirstName" className="form-control"
                         value={this.state.ContactFirstName} onChange={this.handleContactFirstNameChange} />
                     <input type="text" placeholder="ContactLastName *" className="form-control"
@@ -109,7 +197,8 @@ var ContactForm = React.createClass({
                         value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
                     <input type="text" placeholder="ContactDefaultNumberType" className="form-control"
                         value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange} />
-                    <input type="submit" value="Post" className="btn btn-success" />
+                    <input type="button" value="Clear" className="btn btn-default" onClick={this.handleClearClick} />
+                    <input type="submit" value="Submit" className="btn btn-primary" />
                 </form>
             </div>
         );
@@ -149,6 +238,31 @@ var ContactsTable = React.createClass({
         }.bind(this);
         xhr.send(data);
     },
+    handleContactEdit: function (contact) {
+        var data = new FormData();
+        data.append('ContactID', contact.ContactID);
+        data.append('ContactFirstName', contact.ContactFirstName);
+        data.append('ContactLastName', contact.ContactLastName);
+        data.append('ContactAddress', contact.ContactAddress);
+        data.append('ContactEmail', contact.ContactEmail);
+        data.append('ContactDefaultNumber', contact.ContactDefaultNumber);
+        data.append('ContactDefaultNumberType', contact.ContactDefaultNumberType);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', this.props.editUrl + contact.ContactID, true);
+        xhr.onload = function () {
+            this.loadContactsFromServer();
+        }.bind(this);
+        xhr.send(data);
+    },
+    handleContactDelete: function (contact) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', this.props.deleteUrl + contact.ContactID, true);
+        xhr.onload = function () {
+            this.loadContactsFromServer();
+        }.bind(this);
+        xhr.send();
+    },
     handleSearchChange: function (e) {
         this.setState({ search: e.target.value });
     },
@@ -157,24 +271,39 @@ var ContactsTable = React.createClass({
         var search = this.state.search;
         for (var i = 0; i < this.state.contacts.length; i++) {
             filteredContacts = filteredContacts.filter(function (contact) {
-                return (contact.ContactFirstName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-                    || (contact.ContactLastName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-                    || ((contact.ContactFirstName + contact.ContactLastName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
-                    || ((contact.ContactLastName + contact.ContactFirstName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
-                    || (contact.ContactDefaultNumber.toString().indexOf(search.toString()) !== -1);
+                if (contact.ContactFirstName != null) {
+                    return (contact.ContactFirstName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+                        || (contact.ContactLastName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+                        || ((contact.ContactFirstName + contact.ContactLastName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
+                        || ((contact.ContactLastName + contact.ContactFirstName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
+                        || (contact.ContactDefaultNumber.toString().indexOf(search.toString()) !== -1);
+                }
+                else {
+                    return (contact.ContactLastName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+                        || (contact.ContactDefaultNumber.toString().indexOf(search.toString()) !== -1);
+                }
             });
         }
+        var detailsUrl = this.props.detailsUrl;
+        var onContactEdit = this.handleContactEdit;
+        var onContactDelete = this.handleContactDelete;
         var contactNodes = filteredContacts.map(function (contact) {
             return (
-                <Contact key={contact.ContactID}
+                <Contact detailsUrl={detailsUrl}
+                    onContactEdit={onContactEdit}
+                    onContactDelete={onContactDelete}
+                    key={contact.ContactID}
                     ContactID={contact.ContactID}
                     ContactFirstName={contact.ContactFirstName}
                     ContactLastName={contact.ContactLastName}
-                    ContactDefaultNumber={contact.ContactDefaultNumber} />
+                    ContactAddress={contact.ContactAddress}
+                    ContactEmail={contact.ContactEmail}
+                    ContactDefaultNumber={contact.ContactDefaultNumber}
+                    ContactDefaultNumberType={contact.ContactDefaultNumberType} />
             );
         });
         return (
-            <div style={panelCustom}>
+            <div className="panelCustom">
                 <input type="text" placeholder="Search" className="form-control"
                     value={this.state.search} onChange={this.handleSearchChange} />
                 <br />
@@ -191,7 +320,8 @@ var ContactsTable = React.createClass({
         );
     }
 });
+
 ReactDOM.render(
-    <ContactsTable url="/Contacts/All" submitUrl="/Contacts/Create" pollInterval={2000} />,
+    <ContactsTable url="/Contacts/All" detailsUrl="/Contacts/Details/" submitUrl="/Contacts/Create" editUrl="/Contacts/Edit/" deleteUrl="/Contacts/Delete/" pollInterval={2000} />,
     document.getElementById('content')
 );

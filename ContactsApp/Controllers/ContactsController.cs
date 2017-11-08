@@ -61,7 +61,6 @@ namespace ContactsApp.Controllers
                 db.SaveChanges();
                 return Json(contact);
             }
-
             var errors = ModelState.Select(x => x.Value.Errors)
                            .Where(y => y.Count > 0)
                            .ToList();
@@ -93,9 +92,12 @@ namespace ContactsApp.Controllers
             {
                 db.Entry(contact).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Content("Contact Updated");
             }
-            return View(contact);
+            var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
+            return Json(errors);
         }
 
         // GET: Contacts/Delete/5
@@ -120,7 +122,7 @@ namespace ContactsApp.Controllers
             Contact contact = db.Contacts.Find(id);
             db.Contacts.Remove(contact);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Content("Contact Deleted");
         }
 
         protected override void Dispose(bool disposing)
