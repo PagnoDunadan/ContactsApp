@@ -28,26 +28,46 @@ namespace ContactsApp.Controllers
             return Json(db.Contacts.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Contacts/Details/5
-        public ActionResult Details(int? id)
+        // GET: Contacts/GetContact/5
+        [OutputCache(Location = OutputCacheLocation.None)]
+        public ActionResult GetContact(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Contact contact = db.Contacts.Find(id);
             if (contact == null)
             {
                 return HttpNotFound();
             }
-            return View(contact);
+            return Json(contact, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Contacts/Create
-        public ActionResult Create()
+        // GET: Contacts/GetPhoneNumbersForContact/5
+        [OutputCache(Location = OutputCacheLocation.None)]
+        public ActionResult GetPhoneNumbersForContact(int id)
         {
-            return View();
+            var phoneNumbers = db.PhoneNumbers.Where(p => p.Contact.ContactID.Equals(id));
+            return Json(phoneNumbers, JsonRequestBehavior.AllowGet);
         }
+
+        //// GET: Contacts/Details/5
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Contact contact = db.Contacts.Find(id);
+        //    if (contact == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(contact);
+        //}
+
+        //// GET: Contacts/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
         // POST: Contacts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -79,7 +99,7 @@ namespace ContactsApp.Controllers
             {
                 return HttpNotFound();
             }
-            return View(contact);
+            return View();
         }
 
         // POST: Contacts/Edit/5
@@ -100,20 +120,20 @@ namespace ContactsApp.Controllers
             return Json(errors);
         }
 
-        // GET: Contacts/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contact contact = db.Contacts.Find(id);
-            if (contact == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contact);
-        }
+        //// GET: Contacts/Delete/5
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Contact contact = db.Contacts.Find(id);
+        //    if (contact == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(contact);
+        //}
 
         // POST: Contacts/Delete/5
         [HttpPost, ActionName("Delete")]

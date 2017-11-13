@@ -57,6 +57,7 @@
         var ContactEmail = this.state.ContactEmail.trim();
         var ContactDefaultNumber = this.state.ContactDefaultNumber.trim();
         var ContactDefaultNumberType = this.state.ContactDefaultNumberType.trim();
+        // TODO: Input validation
         if (!ContactLastName || !ContactDefaultNumber) {
             alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
@@ -165,6 +166,7 @@ var ContactForm = React.createClass({
         var ContactEmail = this.state.ContactEmail.trim();
         var ContactDefaultNumber = this.state.ContactDefaultNumber.trim();
         var ContactDefaultNumberType = this.state.ContactDefaultNumberType.trim();
+        // TODO: Input validation
         if (!ContactLastName || !ContactDefaultNumber) {
             alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
@@ -267,6 +269,7 @@ var ContactsTable = React.createClass({
         this.setState({ search: e.target.value });
     },
     render: function () {
+        // TODO: Better search filter
         var filteredContacts = this.state.contacts;
         var search = this.state.search;
         for (var i = 0; i < this.state.contacts.length; i++) {
@@ -322,6 +325,7 @@ var ContactsTable = React.createClass({
 });
 
 ReactDOM.render(
-    <ContactsTable url="/Contacts/All" detailsUrl="/Contacts/Details/" submitUrl="/Contacts/Create" editUrl="/Contacts/Edit/" deleteUrl="/Contacts/Delete/" pollInterval={2000} />,
+    // TODO: Fix url names
+    <ContactsTable url="/Contacts/All" /*detailsUrl="/Contacts/Details/"*/ detailsUrl="/Contacts/Edit/" submitUrl="/Contacts/Create" editUrl="/Contacts/Edit/" deleteUrl="/Contacts/Delete/" pollInterval={2000} />,
     document.getElementById('content')
 );
