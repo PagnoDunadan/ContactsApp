@@ -127,7 +127,7 @@ var ContactForm = React.createClass({
             showContactForm: false,
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
-            ContactDefaultNumber: '', ContactDefaultNumberType: '',
+            ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
         };
     },
     handleShowContactFormClick: function () {
@@ -155,7 +155,7 @@ var ContactForm = React.createClass({
         this.setState({
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
-            ContactDefaultNumber: '', ContactDefaultNumberType: '',
+            ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
         });
     },
     handleSubmit: function (e) {
@@ -179,7 +179,7 @@ var ContactForm = React.createClass({
         this.setState({
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
-            ContactDefaultNumber: '', ContactDefaultNumberType: '',
+            ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
         });
     },
     render: function () {
@@ -197,8 +197,12 @@ var ContactForm = React.createClass({
                         value={this.state.ContactEmail} onChange={this.handleContactEmailChange} />
                     <input type="text" placeholder="ContactDefaultNumber *" className="form-control"
                         value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
-                    <input type="text" placeholder="ContactDefaultNumberType" className="form-control"
-                        value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange} />
+                    <select className="form-control" value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange}>
+                        <option value="Mobile">Mobile</option>
+                        <option value="Landline">Landline</option>
+                        <option value="Fax">Fax</option>
+                        <option value="Other">Other</option>
+                    </select>
                     <input type="button" value="Clear" className="btn btn-default" onClick={this.handleClearClick} />
                     <input type="submit" value="Submit" className="btn btn-primary" />
                 </form>
@@ -213,6 +217,7 @@ var ContactsTable = React.createClass({
         xhr.open('get', this.props.url, true);
         xhr.onload = function () {
             var data = JSON.parse(xhr.responseText);
+            // TODO: Sort contacts newest first
             this.setState({ contacts: data });
         }.bind(this);
         xhr.send();
@@ -313,7 +318,7 @@ var ContactsTable = React.createClass({
                 <ContactForm onContactSubmit={this.handleContactSubmit} />
                 <br />
                 <div className="panel panel-default">
-                    <table className="contactsTable table table-hover">
+                    <table className="table table-hover">
                         <tbody>
                             {contactNodes}
                         </tbody>

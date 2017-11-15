@@ -1,3 +1,80 @@
 ﻿body {
     background-color: rgb(241,241,241);
 }
+
+#bootstrap-overrides .panelCustom {
+    width: 400px;
+    margin: 25px auto 25px auto;
+}
+
+#bootstrap-overrides .contactTitle {
+    text-align: center;
+    font-size: 200%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#bootstrap-overrides .phoneNumbersTitle {
+    text-align: center;
+    font-size: 140%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#bootstrap-overrides .contactTd {
+    width: 100%;
+    position: relative;
+}
+
+#bootstrap-overrides .contactButtonEdit {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#bootstrap-overrides .menuButtonSetAsDefault {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 147px;
+}
+
+#bootstrap-overrides .menuButtonEdit {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 80px;
+}
+
+#bootstrap-overrides .menuButtonDelete {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#bootstrap-overrides .contactRow:hover .contactButtonEdit {
+    visibility: visible;
+}
+
+#bootstrap-overrides .contactRow:hover .menuButtonSetAsDefault {
+    visibility: visible;
+}
+
+
+#bootstrap-overrides .contactRow:hover .menuButtonEdit {
+    visibility: visible;
+}
+
+#bootstrap-overrides .contactRow:hover .menuButtonDelete {
+    visibility: visible;
+}
+
+#bootstrap-overrides .displayNone {
+    display: none;
+}
+
+#bootstrap-overrides .clearBoth {
+    clear: both;
+}

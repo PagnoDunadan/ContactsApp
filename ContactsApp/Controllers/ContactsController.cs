@@ -15,6 +15,14 @@ namespace ContactsApp.Controllers
     {
         private ContactsAppContext db = new ContactsAppContext();
 
+        public class PhoneNumberModel
+        {
+            public int PhoneNumberID { get; set; }
+            public string PhoneNumberNumber { get; set; }
+            public string PhoneNumberType { get; set; }
+            public int ContactID { get; set; }
+        }
+
         // GET: Contacts/Search
         public ActionResult Search()
         {
@@ -44,7 +52,22 @@ namespace ContactsApp.Controllers
         [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult GetPhoneNumbersForContact(int id)
         {
-            var phoneNumbers = db.PhoneNumbers.Where(p => p.Contact.ContactID.Equals(id));
+            var phoneNumbers = db.PhoneNumbers
+               .Where(p => p.Contact.ContactID.Equals(id))
+               .Select(p => new PhoneNumberModel
+               {
+                   PhoneNumberID = p.PhoneNumberID,
+                   PhoneNumberNumber = p.PhoneNumberNumber,
+                   PhoneNumberType = p.PhoneNumberType,
+                   ContactID = p.ContactID,
+               }).ToList();
+
+            if (phoneNumbers == null)
+            {
+                return HttpNotFound();
+            }
+
+            //var phoneNumbers = db.PhoneNumbers.Where(p => p.Contact.ContactID.Equals(id));
             return Json(phoneNumbers, JsonRequestBehavior.AllowGet);
         }
 

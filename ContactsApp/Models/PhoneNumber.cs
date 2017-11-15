@@ -13,6 +13,7 @@ namespace ContactsApp.Models
         public string PhoneNumberNumber { get; set; }
         public string PhoneNumberType { get; set; }
         [Required]
+        public int ContactID { get; set; }
         public Contact Contact { get; set; }
     }
 }

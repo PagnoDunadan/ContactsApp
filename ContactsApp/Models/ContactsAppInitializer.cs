@@ -22,11 +22,11 @@ namespace ContactsApp.Models
 
             var phoneNumbers = new List<PhoneNumber>
             {
-                new PhoneNumber {PhoneNumberNumber = "+38521636802", PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(1))},
-                new PhoneNumber {PhoneNumberNumber = "+38521636802", PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(2))},
-                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(3))},
-                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(4))},
-                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Home", Contact = contacts.First(c => c.ContactID.Equals(5))},
+                new PhoneNumber {PhoneNumberNumber = "+38521636802", PhoneNumberType = "Landline", Contact = contacts.First(c => c.ContactID.Equals(1))},
+                new PhoneNumber {PhoneNumberNumber = "+38521636802", PhoneNumberType = "Landline", Contact = contacts.First(c => c.ContactID.Equals(2))},
+                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Landline", Contact = contacts.First(c => c.ContactID.Equals(3))},
+                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Landline", Contact = contacts.First(c => c.ContactID.Equals(4))},
+                new PhoneNumber {PhoneNumberNumber = "+38521882001", PhoneNumberType = "Landline", Contact = contacts.First(c => c.ContactID.Equals(5))},
             };
             phoneNumbers.ForEach(p => context.PhoneNumbers.Add(p));
             context.SaveChanges();
