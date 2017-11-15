@@ -8,11 +8,32 @@
             ContactID: this.props.ContactID,
         };
     },
-    handleSetAsDefault: function() {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.PhoneNumberID != nextProps.PhoneNumberID) {
+            this.setState({ PhoneNumberID: nextProps.PhoneNumberID });
+        };
+        if (this.props.PhoneNumberNumber != nextProps.PhoneNumberNumber) {
+            this.setState({ PhoneNumberNumber: nextProps.PhoneNumberNumber });
+        };
+        if (this.props.PhoneNumberType != nextProps.PhoneNumberType) {
+            this.setState({ PhoneNumberType: nextProps.PhoneNumberType ? nextProps.PhoneNumberType : "Mobile" });
+        };
+        if (this.props.ContactID != nextProps.ContactID) {
+            this.setState({ ContactID: nextProps.ContactID });
+        };
+    },
+    handlePhoneNumberNumberChange: function (e) {
+        this.setState({ PhoneNumberNumber: e.target.value });
+    },
+    handlePhoneNumberTypeChange: function (e) {
+        this.setState({ PhoneNumberType: e.target.value });
+    },
+    handleSetAsDefault: function () {
         var PhoneNumberID = this.props.PhoneNumberID;
         var PhoneNumberNumber = this.props.PhoneNumberNumber;
-        var PhoneNumberType = this.props.PhoneNumberType;
+        var PhoneNumberType = (this.props.PhoneNumberType ? this.props.PhoneNumberType : "Mobile");
         var ContactID = this.props.ContactID;
+
         this.props.onPhoneNumberSetAsDefault({
             PhoneNumberID, PhoneNumberNumber,
             PhoneNumberType, ContactID,
@@ -21,24 +42,19 @@
     handleShowEditForm: function () {
         this.setState({ showEditForm: !this.state.showEditForm });
     },
-    handlePhoneNumberNumberChange: function (e) {
-        this.setState({ PhoneNumberNumber: e.target.value });
+    handleDelete: function () {
+        var PhoneNumberID = this.props.PhoneNumberID;
+        this.props.onPhoneNumberDelete({ PhoneNumberID });
     },
-    handlePhoneNumberTypeChange: function (e) {
-        this.setState({ PhoneNumberType: e.target.value });
-    },
-    handleResetClick: function (e) {
+    handleResetClick: function () {
         this.setState({
             PhoneNumberNumber: this.props.PhoneNumberNumber,
             PhoneNumberType: (this.props.PhoneNumberType ? this.props.PhoneNumberType : "Mobile"),
         });
     },
-    handleCancelClick: function (e) {
-        this.setState({
-            showEditForm: false,
-            PhoneNumberNumber: this.props.PhoneNumberNumber,
-            PhoneNumberType: (this.props.PhoneNumberType ? this.props.PhoneNumberType : "Mobile"),
-        });
+    handleCancelClick: function () {
+        this.handleResetClick();
+        this.setState({ showEditForm: false });
     },
     handleEdit: function (e) {
         e.preventDefault();
@@ -46,20 +62,20 @@
         var PhoneNumberNumber = this.state.PhoneNumberNumber.trim();
         var PhoneNumberType = this.state.PhoneNumberType.trim();
         var ContactID = this.props.ContactID;
-        // TODO: Input validation
         if (!PhoneNumberNumber) {
             alert("PhoneNumberNumber cannot be null");
             return;
-        }
+        };
+        if (PhoneNumberNumber.match(/^\+?[0-9]+$/) == null) {
+            alert('PhoneNumberNumber can only contain numbers. Can start with "+"');
+            return;
+        };
+
         this.props.onPhoneNumberEdit({
             PhoneNumberID, PhoneNumberNumber,
             PhoneNumberType, ContactID,
         });
         this.setState({ showEditForm: false });
-    },
-    handleDelete: function (e) {
-        var PhoneNumberID = this.props.PhoneNumberID;
-        this.props.onPhoneNumberDelete({ PhoneNumberID });
     },
     render: function () {
         var iconLink;
@@ -109,35 +125,37 @@ var PhoneNumberForm = React.createClass({
             PhoneNumberNumber: '', PhoneNumberType: 'Mobile',
         };
     },
-    handleShowPhoneNumberFormClick: function () {
-        this.setState({ showPhoneNumberForm: !this.state.showPhoneNumberForm });
-    },
     handlePhoneNumberNumberChange: function (e) {
         this.setState({ PhoneNumberNumber: e.target.value });
     },
     handlePhoneNumberTypeChange: function (e) {
         this.setState({ PhoneNumberType: e.target.value });
     },
-    handleResetClick: function (e) {
+    handleShowPhoneNumberFormClick: function () {
+        this.setState({ showPhoneNumberForm: !this.state.showPhoneNumberForm });
+    },
+    handleResetClick: function () {
         this.setState({
             PhoneNumberNumber: '', PhoneNumberType: 'Mobile',
         });
     },
-    handleCancelClick: function (e) {
-        this.setState({
-            showPhoneNumberForm: false,
-            PhoneNumberNumber: '', PhoneNumberType: 'Mobile',
-        });
+    handleCancelClick: function () {
+        this.handleResetClick();
+        this.setState({ showPhoneNumberForm: false });
     },
     handleCreate: function (e) {
         e.preventDefault();
         var PhoneNumberNumber = this.state.PhoneNumberNumber.trim();
-        var PhoneNumberType = this.state.PhoneNumberType;
-        // TODO: Input validation
+        var PhoneNumberType = this.state.PhoneNumberType.trim();
         if (!PhoneNumberNumber) {
             alert("PhoneNumberNumber cannot be null");
             return;
-        }
+        };
+        if (PhoneNumberNumber.match(/^\+?[0-9]+$/) == null) {
+            alert('PhoneNumberNumber can only contain numbers. Can start with "+"');
+            return;
+        };
+
         this.props.onPhoneNumberCreate({
             PhoneNumberNumber, PhoneNumberType,
         });
@@ -230,25 +248,17 @@ var ContactModal = React.createClass({
     handleResetClick: function () {
         this.setState({
             ContactID: this.props.ContactID,
-            ContactFirstName: this.props.ContactFirstName,
+            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
             ContactLastName: this.props.ContactLastName,
-            ContactAddress: this.props.ContactAddress,
-            ContactEmail: this.props.ContactEmail,
+            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
+            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
             ContactDefaultNumber: this.props.ContactDefaultNumber,
-            ContactDefaultNumberType: this.props.ContactDefaultNumberType,
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : ""),
         });
     },
     handleCloseClick: function (e) {
         e.preventDefault();
-        this.setState({
-            ContactID: this.props.ContactID,
-            ContactFirstName: this.props.ContactFirstName,
-            ContactLastName: this.props.ContactLastName,
-            ContactAddress: this.props.ContactAddress,
-            ContactEmail: this.props.ContactEmail,
-            ContactDefaultNumber: this.props.ContactDefaultNumber,
-            ContactDefaultNumberType: this.props.ContactDefaultNumberType,
-        });
+        this.handleResetClick();
         this.props.onClose();
     },
     handleSubmit: function (e) {
@@ -264,7 +274,16 @@ var ContactModal = React.createClass({
         if (!ContactLastName || !ContactDefaultNumber) {
             alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
-        }
+        };
+        if (ContactEmail && ContactEmail.match(/^.+@.+$/) == null) {
+            alert("Invalid e-mail format");
+            return;
+        };
+        if (ContactDefaultNumber.match(/^\+?[0-9]+$/) == null) {
+            alert('ContactDefaultNumber can only contain numbers. Can start with "+"');
+            return;
+        };
+
         this.props.onContactEdit({
             ContactID,
             ContactFirstName, ContactLastName,
@@ -377,15 +396,15 @@ var ContactTable = React.createClass({
     handlePhoneNumberSetAsDefault: function (phoneNumber) {
         var contact = {
             ContactID: this.state.contact.ContactID,
-            ContactFirstName: this.state.contact.ContactFirstName,
+            ContactFirstName: (this.state.contact.ContactFirstName ? this.state.contact.ContactFirstName : ""),
             ContactLastName: this.state.contact.ContactLastName,
-            ContactAddress: this.state.contact.ContactAddress,
-            ContactEmail: this.state.contact.ContactEmail,
+            ContactAddress: (this.state.contact.ContactAddress ? this.state.contact.ContactAddress : ""),
+            ContactEmail: (this.state.contact.ContactEmail ? this.state.contact.ContactEmail : ""),
             ContactDefaultNumber: phoneNumber.PhoneNumberNumber,
-            ContactDefaultNumberType: phoneNumber.PhoneNumberType,
+            ContactDefaultNumberType: (phoneNumber.PhoneNumberType ? phoneNumber.PhoneNumberType : ""),
         };
         phoneNumber.PhoneNumberNumber = this.state.contact.ContactDefaultNumber;
-        phoneNumber.PhoneNumberType = this.state.contact.ContactDefaultNumberType;
+        phoneNumber.PhoneNumberType = (this.state.contact.ContactDefaultNumberType ? this.state.contact.ContactDefaultNumberType : "");
 
         this.handleContactEdit(contact);
         this.handlePhoneNumberEdit(phoneNumber);
@@ -444,9 +463,7 @@ var ContactTable = React.createClass({
         });
         return (
             <div className="panelCustom">
-
                 <a href="/"><button type="button" className="btn btn-default btn-sm"><span className="glyphicon glyphicon-menu-left"></span> Back</button></a>
-
                 <ContactModal isOpen={this.state.isContactModalOpen}
                     onClose={this.closeContactModal}
                     onContactEdit={this.handleContactEdit}
@@ -457,7 +474,6 @@ var ContactTable = React.createClass({
                     ContactEmail={this.state.contact.ContactEmail}
                     ContactDefaultNumber={this.state.contact.ContactDefaultNumber}
                     ContactDefaultNumberType={this.state.contact.ContactDefaultNumberType} />
-
                 <div className="panel panel-default">
                     <p className="contactTitle">Contact</p>
                     <table className="table table-hover">
@@ -474,7 +490,6 @@ var ContactTable = React.createClass({
                         </tbody>
                     </table>
                 </div>
-
                 <div className="panel panel-default">
                     <p className="phoneNumbersTitle">Other numbers</p>
                     <table className="table table-hover">

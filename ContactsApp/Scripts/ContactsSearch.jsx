@@ -11,12 +11,28 @@
             ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
         };
     },
-    handleShowEditForm: function () {
-        this.setState({ showEditForm: !this.state.showEditForm });
-    },
-    handleDelete: function (e) {
-        var ContactID = this.props.ContactID;
-        this.props.onContactDelete({ ContactID });
+    componentWillReceiveProps(nextProps) {
+        if (this.props.ContactID != nextProps.ContactID) {
+            this.setState({ ContactID: nextProps.ContactID });
+        };
+        if (this.props.ContactFirstName != nextProps.ContactFirstName) {
+            this.setState({ ContactFirstName: nextProps.ContactFirstName });
+        };
+        if (this.props.ContactLastName != nextProps.ContactLastName) {
+            this.setState({ ContactLastName: nextProps.ContactLastName });
+        };
+        if (this.props.ContactAddress != nextProps.ContactAddress) {
+            this.setState({ ContactAddress: nextProps.ContactAddress });
+        };
+        if (this.props.ContactEmail != nextProps.ContactEmail) {
+            this.setState({ ContactEmail: nextProps.ContactEmail });
+        };
+        if (this.props.ContactDefaultNumber != nextProps.ContactDefaultNumber) {
+            this.setState({ ContactDefaultNumber: nextProps.ContactDefaultNumber });
+        };
+        if (this.props.ContactDefaultNumberType != nextProps.ContactDefaultNumberType) {
+            this.setState({ ContactDefaultNumberType: nextProps.ContactDefaultNumberType });
+        };
     },
     handleContactFirstNameChange: function (e) {
         this.setState({ ContactFirstName: e.target.value });
@@ -36,7 +52,14 @@
     handleContactDefaultNumberTypeChange: function (e) {
         this.setState({ ContactDefaultNumberType: e.target.value });
     },
-    handleResetClick: function (e) {
+    handleShowEditForm: function () {
+        this.setState({ showEditForm: !this.state.showEditForm });
+    },
+    handleDelete: function () {
+        var ContactID = this.props.ContactID;
+        this.props.onContactDelete({ ContactID });
+    },
+    handleResetClick: function () {
         this.setState({
             ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
             ContactLastName: this.props.ContactLastName,
@@ -46,16 +69,9 @@
             ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
         });
     },
-    handleCancelClick: function (e) {
-        this.setState({
-            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
-            ContactLastName: this.props.ContactLastName,
-            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
-            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
-            ContactDefaultNumber: this.props.ContactDefaultNumber,
-            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
-            showEditForm: false,
-        });
+    handleCancelClick: function () {
+        this.handleResetClick();
+        this.setState({ showEditForm: false });
     },
     handleSubmit: function (e) {
         e.preventDefault();
@@ -70,7 +86,16 @@
         if (!ContactLastName || !ContactDefaultNumber) {
             alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
-        }
+        };
+        if (ContactEmail && ContactEmail.match(/^.+@.+$/) == null) {
+            alert("Invalid e-mail format");
+            return;
+        };
+        if (ContactDefaultNumber.match(/^\+?[0-9]+$/) == null) {
+            alert('ContactDefaultNumber can only contain numbers. Can start with "+"');
+            return;
+        };
+
         this.props.onContactEdit({
             ContactID,
             ContactFirstName, ContactLastName,
@@ -141,9 +166,6 @@ var ContactForm = React.createClass({
             ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
         };
     },
-    handleShowContactFormClick: function () {
-        this.setState({ showContactForm: !this.state.showContactForm });
-    },
     handleContactFirstNameChange: function (e) {
         this.setState({ ContactFirstName: e.target.value });
     },
@@ -162,20 +184,19 @@ var ContactForm = React.createClass({
     handleContactDefaultNumberTypeChange: function (e) {
         this.setState({ ContactDefaultNumberType: e.target.value });
     },
-    handleResetClick: function (e) {
+    handleShowContactFormClick: function () {
+        this.setState({ showContactForm: !this.state.showContactForm });
+    },
+    handleResetClick: function () {
         this.setState({
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
             ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
         });
     },
-    handleCancelClick: function (e) {
-        this.setState({
-            ContactFirstName: '', ContactLastName: '',
-            ContactAddress: '', ContactEmail: '',
-            ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
-            showContactForm: false,
-        });
+    handleCancelClick: function () {
+        this.handleResetClick();
+        this.setState({ showContactForm: false });
     },
     handleSubmit: function (e) {
         e.preventDefault();
@@ -190,6 +211,15 @@ var ContactForm = React.createClass({
             alert("ContactLastName and ContactDefaultNumber cannot be null");
             return;
         }
+        if (ContactEmail && ContactEmail.match(/^.+@.+$/) == null) {
+            alert("Invalid e-mail format");
+            return;
+        };
+        if (ContactDefaultNumber.match(/^\+?[0-9]+$/) == null) {
+            alert('ContactDefaultNumber can only contain numbers. Can start with "+"');
+            return;
+        };
+
         this.props.onContactSubmit({
             ContactFirstName, ContactLastName,
             ContactAddress, ContactEmail,
