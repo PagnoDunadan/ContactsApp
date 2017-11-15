@@ -33,7 +33,7 @@ namespace ContactsApp.Controllers
         [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult All()
         {
-            return Json(db.Contacts.ToList(), JsonRequestBehavior.AllowGet);
+            return Json(db.Contacts.OrderByDescending(c=>c.ContactID).ToList(), JsonRequestBehavior.AllowGet);
         }
 
         // GET: Contacts/GetContact/5
@@ -53,7 +53,7 @@ namespace ContactsApp.Controllers
         public ActionResult GetPhoneNumbersForContact(int id)
         {
             var phoneNumbers = db.PhoneNumbers
-               .Where(p => p.Contact.ContactID.Equals(id))
+               .Where(p => p.Contact.ContactID.Equals(id)).OrderByDescending(p => p.PhoneNumberID)
                .Select(p => new PhoneNumberModel
                {
                    PhoneNumberID = p.PhoneNumberID,

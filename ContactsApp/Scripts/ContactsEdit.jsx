@@ -445,6 +445,8 @@ var ContactTable = React.createClass({
         return (
             <div className="panelCustom">
 
+                <a href="/"><button type="button" className="btn btn-default btn-sm"><span className="glyphicon glyphicon-menu-left"></span> Back</button></a>
+
                 <ContactModal isOpen={this.state.isContactModalOpen}
                     onClose={this.closeContactModal}
                     onContactEdit={this.handleContactEdit}
@@ -489,6 +491,7 @@ var ContactTable = React.createClass({
 
 ReactDOM.render(
     <ContactTable currentContactId={window.location.href.match(/([^\/]*)\/*$/)[1]}
+        contactsSearchUrl="/Contacts/Search"
         getContactUrl="/Contacts/GetContact/"
         contactEditUrl="/Contacts/Edit/"
         getPhoneNumbersUrl="/Contacts/GetPhoneNumbersForContact/"

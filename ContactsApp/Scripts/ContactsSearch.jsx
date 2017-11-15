@@ -244,7 +244,6 @@ var ContactsTable = React.createClass({
         xhr.open('get', this.props.url, true);
         xhr.onload = function () {
             var data = JSON.parse(xhr.responseText);
-            // TODO: Sort contacts newest first
             this.setState({ contacts: data });
         }.bind(this);
         xhr.send();
@@ -301,22 +300,30 @@ var ContactsTable = React.createClass({
         this.setState({ search: e.target.value });
     },
     render: function () {
-        // TODO: Better search filter
         var filteredContacts = this.state.contacts;
-        var search = this.state.search;
+        var search = this.state.search.trim().split(" ", 2);
         for (var i = 0; i < this.state.contacts.length; i++) {
             filteredContacts = filteredContacts.filter(function (contact) {
                 if (contact.ContactFirstName != null) {
-                    return (contact.ContactFirstName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-                        || (contact.ContactLastName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-                        || ((contact.ContactFirstName + contact.ContactLastName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
-                        || ((contact.ContactLastName + contact.ContactFirstName).toLowerCase().indexOf(search.toLowerCase().replace(/\s+/g, '')) !== -1)
-                        || (contact.ContactDefaultNumber.toString().indexOf(search.toString()) !== -1);
+                    if (search.length == 1) {
+                        return contact.ContactFirstName.toLowerCase().indexOf(search[0].toLowerCase()) !== -1
+                            || contact.ContactLastName.toLowerCase().indexOf(search[0].toLowerCase()) !== -1
+                            || contact.ContactDefaultNumber.toString().indexOf(search[0].toString()) !== -1;
+                    }
+                    else {
+                        return (contact.ContactFirstName.toLowerCase().indexOf(search[0].toLowerCase()) !== -1
+                            && contact.ContactLastName.toLowerCase().indexOf(search[1].toLowerCase()) !== -1)
+                            || (contact.ContactLastName.toLowerCase().indexOf(search[0].toLowerCase()) !== -1
+                            && contact.ContactFirstName.toLowerCase().indexOf(search[1].toLowerCase()) !== -1);
+                    };
                 }
                 else {
-                    return (contact.ContactLastName.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-                        || (contact.ContactDefaultNumber.toString().indexOf(search.toString()) !== -1);
-                }
+                    if (search.length == 1) {
+                        return (contact.ContactLastName.toLowerCase().indexOf(search[0].toLowerCase()) !== -1)
+                            || (contact.ContactDefaultNumber.toString().indexOf(search[0].toString()) !== -1);
+                    }
+                    else return null;
+                };
             });
         }
         var detailsUrl = this.props.detailsUrl;
