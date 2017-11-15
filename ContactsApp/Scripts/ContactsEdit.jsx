@@ -33,6 +33,13 @@
             PhoneNumberType: (this.props.PhoneNumberType ? this.props.PhoneNumberType : "Mobile"),
         });
     },
+    handleCancelClick: function (e) {
+        this.setState({
+            showEditForm: false,
+            PhoneNumberNumber: this.props.PhoneNumberNumber,
+            PhoneNumberType: (this.props.PhoneNumberType ? this.props.PhoneNumberType : "Mobile"),
+        });
+    },
     handleEdit: function (e) {
         e.preventDefault();
         var PhoneNumberID = this.props.PhoneNumberID;
@@ -48,6 +55,7 @@
             PhoneNumberID, PhoneNumberNumber,
             PhoneNumberType, ContactID,
         });
+        this.setState({ showEditForm: false });
     },
     handleDelete: function (e) {
         var PhoneNumberID = this.props.PhoneNumberID;
@@ -81,8 +89,9 @@
                             <option value="Fax">Fax</option>
                             <option value="Other">Other</option>
                         </select>
-                        <input type="button" value="Reset" className="btn btn-default" onClick={this.handleResetClick} />
-                        <input type="submit" value="Submit" className="btn btn-primary" />
+                        <input type="button" value="Reset" className="btn btn-default buttonWidth33" onClick={this.handleResetClick} />
+                        <input type="button" value="Cancel" className="btn btn-default buttonWidth33" onClick={this.handleCancelClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary buttonWidth33" />
                     </form>
                     <button className="btn btn-primary btn-sm menuButtonSetAsDefault" onClick={this.handleSetAsDefault}>Set as default</button>
                     <button className="btn btn-primary btn-sm menuButtonEdit" onClick={this.handleShowEditForm}><span className="glyphicon glyphicon-edit"></span> Edit</button>
@@ -140,27 +149,164 @@ var PhoneNumberForm = React.createClass({
     render: function () {
         return (
             <div>
-                <button className="btn btn-success" onClick={this.handleShowPhoneNumberFormClick}> Add a new number </button>
-                <form className={this.state.showPhoneNumberForm ? '' : 'displayNone'} onSubmit={this.handleCreate}>
-                    <input type="text" placeholder="PhoneNumberNumber *" className="form-control"
-                        value={this.state.PhoneNumberNumber} onChange={this.handlePhoneNumberNumberChange} />
-                    <select className="form-control" value={this.state.PhoneNumberType} onChange={this.handlePhoneNumberTypeChange}>
-                        <option value="Mobile">Mobile</option>
-                        <option value="Landline">Landline</option>
-                        <option value="Fax">Fax</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <div className="pull-left">
-                        <input type="button" value="Reset" className="btn btn-default" onClick={this.handleResetClick} />
-                    </div>
-                    <div className="pull-right">
-                        <input type="button" value="Cancel" className="btn btn-default" onClick={this.handleCancelClick} />
-                        <input type="submit" value="Submit" className="btn btn-primary" />
-                    </div>
-                    <div className="clearBoth"></div>
-                </form>
+                <button className="btn btn-success addNewPhoneNumberButton" onClick={this.handleShowPhoneNumberFormClick}> Add a new number </button>
+                <div className={this.state.showPhoneNumberForm ? 'contactModal' : 'displayNone'}>
+                    <h1 className="contactTitle">Add Form</h1>
+                    <br />
+                    <form className={this.state.showPhoneNumberForm ? '' : 'displayNone'} onSubmit={this.handleCreate}>
+                        <input type="text" placeholder="PhoneNumberNumber *" className="form-control"
+                            value={this.state.PhoneNumberNumber} onChange={this.handlePhoneNumberNumberChange} />
+                        <select className="form-control" value={this.state.PhoneNumberType} onChange={this.handlePhoneNumberTypeChange}>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Landline">Landline</option>
+                            <option value="Fax">Fax</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <br />
+                        <input type="button" value="Reset" className="btn btn-default buttonWidth33" onClick={this.handleResetClick} />
+                        <input type="button" value="Cancel" className="btn btn-default buttonWidth33" onClick={this.handleCancelClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary buttonWidth33" />
+                    </form>
+                </div>
+                <div className={this.state.showPhoneNumberForm ? 'contactModalBackdrop' : 'displayNone'} onClick={this.handleCancelClick} />
             </div>
         );
+    }
+});
+
+var ContactModal = React.createClass({
+    getInitialState: function () {
+        return {
+            ContactID: this.props.ContactID,
+            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
+            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
+        };
+    },
+    componentWillReceiveProps(nextProps) {
+        if (this.props.ContactID != nextProps.ContactID) {
+            this.setState({ ContactID: nextProps.ContactID });
+        };
+        if (this.props.ContactFirstName != nextProps.ContactFirstName) {
+            this.setState({ ContactFirstName: nextProps.ContactFirstName });
+        };
+        if (this.props.ContactLastName != nextProps.ContactLastName) {
+            this.setState({ ContactLastName: nextProps.ContactLastName });
+        };
+        if (this.props.ContactAddress != nextProps.ContactAddress) {
+            this.setState({ ContactAddress: nextProps.ContactAddress });
+        };
+        if (this.props.ContactEmail != nextProps.ContactEmail) {
+            this.setState({ ContactEmail: nextProps.ContactEmail });
+        };
+        if (this.props.ContactDefaultNumber != nextProps.ContactDefaultNumber) {
+            this.setState({ ContactDefaultNumber: nextProps.ContactDefaultNumber });
+        };
+        if (this.props.ContactDefaultNumberType != nextProps.ContactDefaultNumberType) {
+            this.setState({ ContactDefaultNumberType: nextProps.ContactDefaultNumberType });
+        };
+    },
+    handleContactFirstNameChange: function (e) {
+        this.setState({ ContactFirstName: e.target.value });
+    },
+    handleContactLastNameChange: function (e) {
+        this.setState({ ContactLastName: e.target.value });
+    },
+    handleContactAddressChange: function (e) {
+        this.setState({ ContactAddress: e.target.value });
+    },
+    handleContactEmailChange: function (e) {
+        this.setState({ ContactEmail: e.target.value });
+    },
+    handleContactDefaultNumberChange: function (e) {
+        this.setState({ ContactDefaultNumber: e.target.value });
+    },
+    handleContactDefaultNumberTypeChange: function (e) {
+        this.setState({ ContactDefaultNumberType: e.target.value });
+    },
+    handleResetClick: function () {
+        this.setState({
+            ContactID: this.props.ContactID,
+            ContactFirstName: this.props.ContactFirstName,
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: this.props.ContactAddress,
+            ContactEmail: this.props.ContactEmail,
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: this.props.ContactDefaultNumberType,
+        });
+    },
+    handleCloseClick: function (e) {
+        e.preventDefault();
+        this.setState({
+            ContactID: this.props.ContactID,
+            ContactFirstName: this.props.ContactFirstName,
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: this.props.ContactAddress,
+            ContactEmail: this.props.ContactEmail,
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: this.props.ContactDefaultNumberType,
+        });
+        this.props.onClose();
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        var ContactID = this.props.ContactID;
+        var ContactFirstName = this.state.ContactFirstName.trim();
+        var ContactLastName = this.state.ContactLastName.trim();
+        var ContactAddress = this.state.ContactAddress.trim();
+        var ContactEmail = this.state.ContactEmail.trim();
+        var ContactDefaultNumber = this.state.ContactDefaultNumber.trim();
+        var ContactDefaultNumberType = this.state.ContactDefaultNumberType.trim();
+        // TODO: Input validation
+        if (!ContactLastName || !ContactDefaultNumber) {
+            alert("ContactLastName and ContactDefaultNumber cannot be null");
+            return;
+        }
+        this.props.onContactEdit({
+            ContactID,
+            ContactFirstName, ContactLastName,
+            ContactAddress, ContactEmail,
+            ContactDefaultNumber, ContactDefaultNumberType,
+        });
+        this.props.onClose();
+    },
+    render: function () {
+        if (this.props.isOpen === false) return null;
+
+        return (
+            <div>
+                <div className="contactModal">
+                    <p className="contactTitle">Edit Form</p>
+                    <br />
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="text" placeholder="ContactFirstName" className="form-control"
+                            value={this.state.ContactFirstName} onChange={this.handleContactFirstNameChange} />
+                        <input type="text" placeholder="ContactLastName *" className="form-control"
+                            value={this.state.ContactLastName} onChange={this.handleContactLastNameChange} />
+                        <input type="text" placeholder="ContactAddress" className="form-control"
+                            value={this.state.ContactAddress} onChange={this.handleContactAddressChange} />
+                        <input type="text" placeholder="ContactEmail" className="form-control"
+                            value={this.state.ContactEmail} onChange={this.handleContactEmailChange} />
+                        <input type="text" placeholder="ContactDefaultNumber *" className="form-control"
+                            value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
+                        <select className="form-control" value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange}>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Landline">Landline</option>
+                            <option value="Fax">Fax</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <br />
+                        <input type="button" value="Reset" className="btn btn-default buttonWidth33" onClick={this.handleResetClick} />
+                        <input type="button" value="Cancel" className="btn btn-default buttonWidth33" onClick={this.handleCloseClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary buttonWidth33" />
+                    </form>
+                </div>
+                <div className="contactModalBackdrop" onClick={this.handleCloseClick} />
+            </div>
+        )
     }
 });
 
@@ -184,13 +330,19 @@ var ContactTable = React.createClass({
         xhr.send();
     },
     getInitialState: function () {
-        return { contact: {}, phoneNumbers: [] };
+        return { contact: {}, phoneNumbers: [], isContactModalOpen: false };
     },
     componentDidMount: function () {
         this.loadContactFromServer();
         this.loadPhoneNumbersFromServer();
         window.setInterval(this.loadContactFromServer, this.props.pollInterval);
         window.setInterval(this.loadPhoneNumbersFromServer, this.props.pollInterval);
+    },
+    openContactModal: function () {
+        this.setState({ isContactModalOpen: true })
+    },
+    closeContactModal: function () {
+        this.setState({ isContactModalOpen: false })
     },
     handleContactEdit: function (contact) {
         var data = new FormData();
@@ -237,37 +389,6 @@ var ContactTable = React.createClass({
 
         this.handleContactEdit(contact);
         this.handlePhoneNumberEdit(phoneNumber);
-
-        //var contact = new FormData();
-        //data.append('ContactID', this.state.contact.ContactID);
-        //data.append('ContactFirstName', this.state.contact.ContactFirstName);
-        //data.append('ContactLastName', this.state.contact.ContactLastName);
-        //data.append('ContactAddress', this.state.contact.ContactAddress);
-        //data.append('ContactEmail', this.state.contact.ContactEmail);
-        //data.append('ContactDefaultNumber', phoneNumber.PhoneNumberNumber);
-        //data.append('ContactDefaultNumberType', phoneNumber.PhoneNumberType);
-
-        //var phoneNumber = new FormData();
-        //data.append('PhoneNumberID', phoneNumber.PhoneNumberID);
-        //data.append('PhoneNumberNumber', this.state.contact.ContactDefaultNumber);
-        //data.append('PhoneNumberType', this.state.contact.ContactDefaultNumberType);
-        //data.append('ContactID', phoneNumber.ContactID);
-
-        //var xhr1 = new XMLHttpRequest();
-        //// TODO: Namjestit link
-        //xhr1.open('post', this.props.submitUrl, true);
-        //xhr1.onload = function () {
-        //    this.loadContactFromServer();
-        //}.bind(this);
-        //xhr1.send(contact);
-
-        //var xhr2 = new XMLHttpRequest();
-        //// TODO: Namjestit link
-        //xhr2.open('post', this.props.submitUrl, true);
-        //xhr2.onload = function () {
-        //    this.loadPhoneNumbersFromServer();
-        //}.bind(this);
-        //xhr2.send(phoneNumber);
     },
     handlePhoneNumberEdit: function (phoneNumber) {
         var data = new FormData();
@@ -323,6 +444,18 @@ var ContactTable = React.createClass({
         });
         return (
             <div className="panelCustom">
+
+                <ContactModal isOpen={this.state.isContactModalOpen}
+                    onClose={this.closeContactModal}
+                    onContactEdit={this.handleContactEdit}
+                    ContactID={this.state.contact.ContactID}
+                    ContactFirstName={this.state.contact.ContactFirstName}
+                    ContactLastName={this.state.contact.ContactLastName}
+                    ContactAddress={this.state.contact.ContactAddress}
+                    ContactEmail={this.state.contact.ContactEmail}
+                    ContactDefaultNumber={this.state.contact.ContactDefaultNumber}
+                    ContactDefaultNumberType={this.state.contact.ContactDefaultNumberType} />
+
                 <div className="panel panel-default">
                     <p className="contactTitle">Contact</p>
                     <table className="table table-hover">
@@ -333,12 +466,13 @@ var ContactTable = React.createClass({
                                     <p><img src="https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/location-20.png" /> {this.state.contact.ContactAddress}</p>
                                     <p><img src="https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/internet-mail-20.png" /> {this.state.contact.ContactEmail}</p>
                                     <p><img src={iconLink} /> {this.state.contact.ContactDefaultNumber}</p>
-                                    <button className="btn btn-success btn-sm contactButtonEdit" onClick={this.handleShowEditForm}><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                                    <button className="btn btn-success btn-sm contactButtonEdit" onClick={this.openContactModal}><span className="glyphicon glyphicon-edit"></span> Edit</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
                 <div className="panel panel-default">
                     <p className="phoneNumbersTitle">Other numbers</p>
                     <table className="table table-hover">
@@ -354,7 +488,6 @@ var ContactTable = React.createClass({
 });
 
 ReactDOM.render(
-    // TODO: Fix url names
     <ContactTable currentContactId={window.location.href.match(/([^\/]*)\/*$/)[1]}
         getContactUrl="/Contacts/GetContact/"
         contactEditUrl="/Contacts/Edit/"

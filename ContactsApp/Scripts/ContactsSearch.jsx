@@ -8,7 +8,7 @@
             ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
             ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
             ContactDefaultNumber: this.props.ContactDefaultNumber,
-            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : ""),
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
         };
     },
     handleShowEditForm: function () {
@@ -16,9 +16,7 @@
     },
     handleDelete: function (e) {
         var ContactID = this.props.ContactID;
-        this.props.onContactDelete({
-            ContactID,
-        });
+        this.props.onContactDelete({ ContactID });
     },
     handleContactFirstNameChange: function (e) {
         this.setState({ ContactFirstName: e.target.value });
@@ -45,7 +43,18 @@
             ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
             ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
             ContactDefaultNumber: this.props.ContactDefaultNumber,
-            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : ""),
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
+        });
+    },
+    handleCancelClick: function (e) {
+        this.setState({
+            ContactFirstName: (this.props.ContactFirstName ? this.props.ContactFirstName : ""),
+            ContactLastName: this.props.ContactLastName,
+            ContactAddress: (this.props.ContactAddress ? this.props.ContactAddress : ""),
+            ContactEmail: (this.props.ContactEmail ? this.props.ContactEmail : ""),
+            ContactDefaultNumber: this.props.ContactDefaultNumber,
+            ContactDefaultNumberType: (this.props.ContactDefaultNumberType ? this.props.ContactDefaultNumberType : "Mobile"),
+            showEditForm: false,
         });
     },
     handleSubmit: function (e) {
@@ -68,6 +77,7 @@
             ContactAddress, ContactEmail,
             ContactDefaultNumber, ContactDefaultNumberType,
         });
+        this.setState({ showEditForm: false });
     },
     render: function () {
         var iconLink;
@@ -112,8 +122,9 @@
                             <option value="Fax">Fax</option>
                             <option value="Other">Other</option>
                         </select>
-                        <input type="button" value="Reset" className="btn btn-default" onClick={this.handleResetClick} />
-                        <input type="submit" value="Submit" className="btn btn-primary" />
+                        <input type="button" value="Reset" className="btn btn-default buttonWidth33" onClick={this.handleResetClick} />
+                        <input type="button" value="Cancel" className="btn btn-default buttonWidth33" onClick={this.handleCancelClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary buttonWidth33" />
                     </form>
                 </td>
             </tr>
@@ -151,11 +162,19 @@ var ContactForm = React.createClass({
     handleContactDefaultNumberTypeChange: function (e) {
         this.setState({ ContactDefaultNumberType: e.target.value });
     },
-    handleClearClick: function (e) {
+    handleResetClick: function (e) {
         this.setState({
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
             ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
+        });
+    },
+    handleCancelClick: function (e) {
+        this.setState({
+            ContactFirstName: '', ContactLastName: '',
+            ContactAddress: '', ContactEmail: '',
+            ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
+            showContactForm: false,
         });
     },
     handleSubmit: function (e) {
@@ -180,32 +199,40 @@ var ContactForm = React.createClass({
             ContactFirstName: '', ContactLastName: '',
             ContactAddress: '', ContactEmail: '',
             ContactDefaultNumber: '', ContactDefaultNumberType: 'Mobile',
+            showContactForm: false,
         });
     },
     render: function () {
         return (
             <div>
                 <button className="btn btn-success" onClick={this.handleShowContactFormClick}>Show Contact Form</button>
-                <form className={this.state.showContactForm ? '' : 'displayNone'} onSubmit={this.handleSubmit}>
-                    <input type="text" placeholder="ContactFirstName" className="form-control"
-                        value={this.state.ContactFirstName} onChange={this.handleContactFirstNameChange} />
-                    <input type="text" placeholder="ContactLastName *" className="form-control"
-                        value={this.state.ContactLastName} onChange={this.handleContactLastNameChange} />
-                    <input type="text" placeholder="ContactAddress" className="form-control"
-                        value={this.state.ContactAddress} onChange={this.handleContactAddressChange} />
-                    <input type="text" placeholder="ContactEmail" className="form-control"
-                        value={this.state.ContactEmail} onChange={this.handleContactEmailChange} />
-                    <input type="text" placeholder="ContactDefaultNumber *" className="form-control"
-                        value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
-                    <select className="form-control" value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange}>
-                        <option value="Mobile">Mobile</option>
-                        <option value="Landline">Landline</option>
-                        <option value="Fax">Fax</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <input type="button" value="Clear" className="btn btn-default" onClick={this.handleClearClick} />
-                    <input type="submit" value="Submit" className="btn btn-primary" />
-                </form>
+                <div className={this.state.showContactForm ? 'contactModal' : 'displayNone'}>
+                    <h1 className="contactTitle">Add Form</h1>
+                    <br />
+                    <form className={this.state.showContactForm ? '' : 'displayNone'} onSubmit={this.handleSubmit}>
+                        <input type="text" placeholder="ContactFirstName" className="form-control"
+                            value={this.state.ContactFirstName} onChange={this.handleContactFirstNameChange} />
+                        <input type="text" placeholder="ContactLastName *" className="form-control"
+                            value={this.state.ContactLastName} onChange={this.handleContactLastNameChange} />
+                        <input type="text" placeholder="ContactAddress" className="form-control"
+                            value={this.state.ContactAddress} onChange={this.handleContactAddressChange} />
+                        <input type="text" placeholder="ContactEmail" className="form-control"
+                            value={this.state.ContactEmail} onChange={this.handleContactEmailChange} />
+                        <input type="text" placeholder="ContactDefaultNumber *" className="form-control"
+                            value={this.state.ContactDefaultNumber} onChange={this.handleContactDefaultNumberChange} />
+                        <select className="form-control" value={this.state.ContactDefaultNumberType} onChange={this.handleContactDefaultNumberTypeChange}>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Landline">Landline</option>
+                            <option value="Fax">Fax</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <br />
+                        <input type="button" value="Reset" className="btn btn-default buttonWidth33" onClick={this.handleResetClick} />
+                        <input type="button" value="Cancel" className="btn btn-default buttonWidth33" onClick={this.handleCancelClick} />
+                        <input type="submit" value="Submit" className="btn btn-primary buttonWidth33" />
+                    </form>
+                </div>
+                <div className={this.state.showContactForm ? 'contactModalBackdrop' : 'displayNone'} onClick={this.handleCancelClick} />
             </div>
         );
     }
@@ -330,7 +357,6 @@ var ContactsTable = React.createClass({
 });
 
 ReactDOM.render(
-    // TODO: Fix url names
-    <ContactsTable url="/Contacts/All" /*detailsUrl="/Contacts/Details/"*/ detailsUrl="/Contacts/Edit/" submitUrl="/Contacts/Create" editUrl="/Contacts/Edit/" deleteUrl="/Contacts/Delete/" pollInterval={2000} />,
+    <ContactsTable url="/Contacts/All" detailsUrl="/Contacts/Edit/" submitUrl="/Contacts/Create" editUrl="/Contacts/Edit/" deleteUrl="/Contacts/Delete/" pollInterval={2000} />,
     document.getElementById('content')
 );
